@@ -47,11 +47,11 @@ def parse(String description) {
 
 def authSyno() {
     def authURL = [
-        uri: "https://${synoIP}:${synoPort}/webapi/auth.cgi?api=SYNO.API.Auth&method=Login&version=3&account=${userName}&passwd=${passWord}&session=SurveillanceStation&format=sid",
+        uri: "https://${synoIP}:${synoPort}/webapi/auth.cgi?api=SYNO.API.Auth&method=login&version=3&account=${userName}&passwd=${passWord}&session=SurveillanceStation&format=sid",
         contentType: 'application/json',
-        textParser: 'true',
-        ignoreSSLIssues: "${noSSLCheck == true}" 
+        textParser: 'true'
     ]
+    authURL.ignoreSSLIssues = noSSLCheck
     
     if (logEnable) log.debug "Sending Auth GET request to [${authURL}]"
 
@@ -68,11 +68,12 @@ def authSyno() {
 }
 def deAuthSyno() {
         def deauthURL = [
-        uri: "https://${synoIP}:${synoPort}/webapi/auth.cgi?api=SYNO.API.Auth&method=Logout&version=3&account=${userName}&passwd=${passWord}&session=SurveillanceStation",
+        uri: "https://${synoIP}:${synoPort}/webapi/auth.cgi?api=SYNO.API.Auth&method=logout&version=3&account=${userName}&passwd=${passWord}&session=SurveillanceStation",
         contentType: 'application/json',
-        textParser: 'true',
-        ignoreSSLIssues: "${noSSLCheck == true}"
+        textParser: 'true'
     ]
+    deauthURL.ignoreSSLIssues = noSSLCheck
+    
      if (logEnable) log.debug "Sending DeAuth GET request to [${deauthURL}]"
 
     try {
@@ -91,9 +92,9 @@ def on() {
     def onURL = [
         uri: "https://${synoIP}:${synoPort}/webapi/entry.cgi?api=SYNO.SurveillanceStation.HomeMode&version=1&method=Switch&on=true&_sid=${urlToken}",
         contentType: 'application/json',
-        textParser: 'true',
-        ignoreSSLIssues: "${noSSLCheck == true}"
+        textParser: 'true'
     ]
+    onURL.ignoreSSLIssues = noSSLCheck
     try {
         httpGet(onURL) { resp ->
             if (resp.success) {
@@ -115,9 +116,9 @@ def off() {
     def offURL = [
         uri: "https://${synoIP}:${synoPort}/webapi/entry.cgi?api=SYNO.SurveillanceStation.HomeMode&version=1&method=Switch&on=false&_sid=${urlToken}",
         contentType: 'application/json',
-        textParser: 'true',
-        ignoreSSLIssues: "${noSSLCheck == true}"
+        textParser: 'true'
     ]
+    offURL.ignoreSSLIssues = noSSLCheck
      if (logEnable) log.debug "Sending on GET request to [${offURL}]"
 
     try {
